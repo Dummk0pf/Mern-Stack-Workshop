@@ -2,23 +2,102 @@ body{
     font-family: monospace;
     box-sizing: border-box;
 
+    color: white;
+    background-color: rgb(41, 41, 41);
+}
+
+::selection{
     background-color: black;
+}
+
+sup{
+    font-size: small;
+    vertical-align: top;
+}
+
+sub{
+    font-size: medium;
+    vertical-align: bottom;
 }
 
 .container{
     position: absolute;
     inset: 0;
     margin: auto;
+    width: 60vw;
+    height: 70vh;
+    padding:2rem 0rem 7rem 0rem;
+
+    /* background-color: rgba(0, 0, 0, 0.407); */
 }
 
+    .equation{
+        width: 83%;
+        height: 3rem;
+        margin: 0.2rem auto;
+
+        background-color: rgba(0, 0, 0, 0.136);
+    }
+
+    .current{
+        display: block;
+        width: 83%;
+        height: 3rem;
+
+        margin: 0rem auto;
+        border: none;
+
+        color: white;
+        text-align: right;
+        background-color: rgba(7, 7, 7, 0.166);
+    }
+
     .button-container{
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
         display: grid;
-        gap: 1rem;
+        
+        justify-content: center;
+        align-content: center;
+        grid-template-columns: 20% 20% 20% 20%;
+        grid-template-rows: 15% 15% 15% 15% 15% 15%;
+        row-gap: 1%;
+        column-gap: 1%;
     }
 
     .button{
-        width: 3rem;
-        height: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        
+        font-size: 1rem;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
 
-        background-color: white;
+    .button:hover{
+        background-color: rgba(255, 255, 255, 0.093);
+    }
+
+    .button::after{
+        content: '';
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        opacity: 0.4;
+        background: radial-gradient(white, #01020495, 80%);
+    }
+    
+    .darker{
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .equals{
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .equals:hover{
+        background-color: rgba(86, 133, 251, 0.166);
     }
