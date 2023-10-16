@@ -7,6 +7,8 @@ function getId(id){
 let currentNumber = "";
 let currentEquation = "";
 
+let equalPressed = false;
+
 const equation = getId("equation-input");
 const current = getId("current-input");
 
@@ -39,16 +41,16 @@ const eight = getId("eight");
 const nine = getId("nine");
 
 const numbers = new Map([
-    [zero, 0], 
-    [one, 1], 
-    [two, 2], 
-    [three, 3], 
-    [four, 4], 
-    [five, 5], 
-    [six, 6], 
-    [seven, 7], 
-    [eight, 8], 
-    [nine, 9], 
+    [zero, "0"], 
+    [one, "1"], 
+    [two, "2"], 
+    [three, "3"], 
+    [four, "4"], 
+    [five, "5"], 
+    [six, "6"], 
+    [seven, "7"], 
+    [eight, "8"], 
+    [nine, "9"], 
 ]);
 
 const basicMath = new Map([
@@ -69,12 +71,21 @@ const symbols = new Map([
 ]);
 
 const displayNumber = function(){
+    if(equalPressed)
+    currentNumber = "";
+    equalPressed = false;
     currentNumber += numbers.get(this);
     current.textContent = currentNumber;
 }
 
 const basicOp = function(){
-    currentEquation += `${currentNumber}  ${basicMath.get(this)} `;
+    console.log(currentEquation.substring(-2));
+    if("/*-+".includes(currentEquation[currentEquation.length-2])){
+        currentEquation = currentEquation.substring(-3) + basicMath.get(this) + " ";
+    }
+    else{
+        currentEquation += `${currentNumber}  ${basicMath.get(this)} `;
+    }
     equation.textContent = currentEquation;
     currentNumber = "";
     current.textContent = "";
@@ -108,8 +119,15 @@ const clearEverythingEvent = function(){
     current.textContent = currentNumber;
 };
 
-const 
-
+const equalsEvent = function(){
+    equalPressed = true;
+    const answer = eval(`${currentEquation} ${currentNumber}`);
+    console.log(answer);
+    currentEquation = "";
+    currentNumber = answer + "";
+    current.textContent = currentNumber;
+    equation.textContent = "";
+}
 
 
 for (const num of numbers.keys()) {
@@ -129,3 +147,5 @@ invert.addEventListener('click', invertEvent);
 clearEverything.addEventListener('click', clearEverythingEvent);
 
 backspace.addEventListener('click', backspaceEvent);
+
+equal.addEventListener('click', equalsEvent);
