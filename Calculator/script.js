@@ -19,7 +19,7 @@ const backspace = getId("delete");
 const percent = getId("percentage");
 const inverse = getId("inverse");
 const square = getId("square");
-const squareroot = getId("square-root");
+const squareRoot = getId("square-root");
 const divide = getId("divide");
 const multiply = getId("multiply");
 const add = getId("add");
@@ -58,37 +58,26 @@ const basicMath = new Map([
     [multiply, "*"],
     [add, "+"],
     [subtract, "-"]
-])
-
-const symbols = new Map([
-    [percent, "%"],
-    [inverse, "1/"],
-    [square, "sq"],
-    [squareroot, "sqr"],
-    [invert, "-"],
-    [decimalPoint, "."],
-    [equal, "="]
 ]);
 
 const displayNumber = function(){
     if(equalPressed)
     currentNumber = "";
     equalPressed = false;
-    currentNumber += numbers.get(this);
+    currentNumber = Number(currentNumber + numbers.get(this))+"";
     current.textContent = currentNumber;
 }
 
 const basicOp = function(){
-    console.log(currentEquation.substring(-2));
-    if("/*-+".includes(currentEquation[currentEquation.length-2])){
-        currentEquation = currentEquation.substring(-3) + basicMath.get(this) + " ";
+    if(currentNumber === ""){
+        currentEquation = currentEquation.substring(0, currentEquation.length-2) + basicMath.get(this) + " ";
     }
     else{
         currentEquation += `${currentNumber}  ${basicMath.get(this)} `;
     }
     equation.textContent = currentEquation;
     currentNumber = "";
-    current.textContent = "";
+    current.textContent = currentNumber;
 }
 
 const decimalPointEvent = function(){
@@ -96,7 +85,7 @@ const decimalPointEvent = function(){
         currentNumber += ".";
         current.textContent = currentNumber;
     }
-};
+}
 
 const invertEvent = function(){
     if(currentNumber.includes("-")){
@@ -107,31 +96,60 @@ const invertEvent = function(){
         currentNumber = "-" + currentNumber; 
         current.textContent = currentNumber;
     }
-};
+}
 
 const backspaceEvent = function(){
     currentNumber = currentNumber.slice(0,-1);
     current.textContent = currentNumber;
 }
 
-const clearEverythingEvent = function(){
-    currentNumber = "";
+const percentEvent = function(){
+    currentNumber = (Number(currentNumber) / 100) + "";
     current.textContent = currentNumber;
-};
+}
+
+const inverseEvent = function(){
+    currentNumber = (1 / Number(currentNumber)) + "";
+    current.textContent = currentNumber;
+}
+
+const squareEvent = function(){
+    currentNumber = (Number(currentNumber) * Number(currentNumber)) + "";
+    current.textContent = currentNumber;
+}
+
+const squareRootEvent = function(){
+    currentNumber = Math.sqrt(Number(currentNumber)) + "";
+    current.textContent = currentNumber;
+}
 
 const equalsEvent = function(){
     equalPressed = true;
-    const answer = eval(`${currentEquation} ${currentNumber}`);
-    console.log(answer);
+    try {
+        const answer = eval(`${currentEquation} ${currentNumber}`);
+        currentNumber = answer + "";
+    } catch (error) {
+        currentNumber = "";
+    }
     currentEquation = "";
-    currentNumber = answer + "";
     current.textContent = currentNumber;
     equation.textContent = "";
 }
 
+const clearEverythingEvent = function(){
+    currentNumber = "";
+    current.textContent = currentNumber;
+}
+
+const clearAllEvent = function(){
+    currentEquation = "";
+    currentNumber = "";
+    current.textContent = "";
+    equation.textContent = "";
+}
 
 for (const num of numbers.keys()) {
-    num.addEventListener('click',displayNumber);
+    num.addEventListener('click', displayNumber);
 }
 
 for (const sym of basicMath.keys()) {
@@ -144,8 +162,18 @@ decimalPoint.addEventListener('click', decimalPointEvent);
 
 invert.addEventListener('click', invertEvent);
 
-clearEverything.addEventListener('click', clearEverythingEvent);
+inverse.addEventListener('click', inverseEvent);
+
+square.addEventListener('click', squareEvent);
+
+squareRoot.addEventListener('click', squareRootEvent);
+
+percent.addEventListener('click', percentEvent);
 
 backspace.addEventListener('click', backspaceEvent);
 
 equal.addEventListener('click', equalsEvent);
+
+clearEverything.addEventListener('click', clearEverythingEvent);
+
+clearAll.addEventListener('click', clearAllEvent);
