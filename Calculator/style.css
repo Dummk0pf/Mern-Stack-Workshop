@@ -39,6 +39,9 @@ sub{
         margin: 0.2rem auto;
         padding: 0rem 0.5rem;
 
+        font-size: 1.2rem;
+        text-align: right;
+        line-height: 3rem;
         background-color: rgba(0, 0, 0, 0.136);
     }
 

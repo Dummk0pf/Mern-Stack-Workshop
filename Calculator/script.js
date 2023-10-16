@@ -10,10 +10,11 @@ let currentEquation = "";
 const equation = getId("equation-input");
 const current = getId("current-input");
 
-const percent = getId("percentage");
 const clearEverything = getId("clear-everything");
 const clearAll = getId("clear-all");
 const backspace = getId("delete");
+
+const percent = getId("percentage");
 const inverse = getId("inverse");
 const square = getId("square");
 const squareroot = getId("square-root");
@@ -50,19 +51,81 @@ const numbers = new Map([
     [nine, 9], 
 ]);
 
+const basicMath = new Map([
+    [divide, "/"],
+    [multiply, "*"],
+    [add, "+"],
+    [subtract, "-"]
+])
+
+const symbols = new Map([
+    [percent, "%"],
+    [inverse, "1/"],
+    [square, "sq"],
+    [squareroot, "sqr"],
+    [invert, "-"],
+    [decimalPoint, "."],
+    [equal, "="]
+]);
+
 const displayNumber = function(){
     currentNumber += numbers.get(this);
     current.textContent = currentNumber;
-    console.log(currentNumber);
 }
+
+const basicOp = function(){
+    currentEquation += `${currentNumber}  ${basicMath.get(this)} `;
+    equation.textContent = currentEquation;
+    currentNumber = "";
+    current.textContent = "";
+}
+
+const decimalPointEvent = function(){
+    if(!currentNumber.includes(".")){
+        currentNumber += ".";
+        current.textContent = currentNumber;
+    }
+};
+
+const invertEvent = function(){
+    if(currentNumber.includes("-")){
+        currentNumber = currentNumber.substring(1);
+        current.textContent = currentNumber;
+    }
+    else{
+        currentNumber = "-" + currentNumber; 
+        current.textContent = currentNumber;
+    }
+};
+
+const backspaceEvent = function(){
+    currentNumber = currentNumber.slice(0,-1);
+    current.textContent = currentNumber;
+}
+
+const clearEverythingEvent = function(){
+    currentNumber = "";
+    current.textContent = currentNumber;
+};
+
+const 
+
+
 
 for (const num of numbers.keys()) {
     num.addEventListener('click',displayNumber);
 }
 
-decimalPoint.addEventListener('click',function(){
-    if(!currentNumber.includes(".")){
-        currentNumber += ".";
-        current.textContent = currentNumber;
-    }
-});
+for (const sym of basicMath.keys()) {
+    sym.addEventListener('click', basicOp);
+}
+
+
+
+decimalPoint.addEventListener('click', decimalPointEvent);
+
+invert.addEventListener('click', invertEvent);
+
+clearEverything.addEventListener('click', clearEverythingEvent);
+
+backspace.addEventListener('click', backspaceEvent);
