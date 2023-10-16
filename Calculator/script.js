@@ -9,6 +9,8 @@ let currentEquation = "";
 
 let equalPressed = false;
 
+const keyboard = document.querySelector("body");
+
 const equation = getId("equation-input");
 const current = getId("current-input");
 
@@ -60,20 +62,21 @@ const basicMath = new Map([
     [subtract, "-"]
 ]);
 
-const displayNumber = function(){
+
+const displayNumber = function(e, obj = this){
     if(equalPressed)
     currentNumber = "";
     equalPressed = false;
-    currentNumber = Number(currentNumber + numbers.get(this))+"";
+    currentNumber = Number(currentNumber + numbers.get(obj))+"";
     current.textContent = currentNumber;
 }
 
-const basicOp = function(){
+const basicOp = function(e, obj = this){
     if(currentNumber === ""){
-        currentEquation = currentEquation.substring(0, currentEquation.length-2) + basicMath.get(this) + " ";
+        currentEquation = currentEquation.substring(0, currentEquation.length-2) + basicMath.get(obj) + " ";
     }
     else{
-        currentEquation += `${currentNumber}  ${basicMath.get(this)} `;
+        currentEquation += `${currentNumber}  ${basicMath.get(obj)} `;
     }
     equation.textContent = currentEquation;
     currentNumber = "";
@@ -156,7 +159,7 @@ for (const sym of basicMath.keys()) {
     sym.addEventListener('click', basicOp);
 }
 
-
+// Mouse Events
 
 decimalPoint.addEventListener('click', decimalPointEvent);
 
@@ -177,3 +180,56 @@ equal.addEventListener('click', equalsEvent);
 clearEverything.addEventListener('click', clearEverythingEvent);
 
 clearAll.addEventListener('click', clearAllEvent);
+
+// Keyboard Events
+
+const methodMap = new Map([
+    ["0", {element: zero, method: displayNumber}],
+    ["1", {element: one, method: displayNumber}],
+    ["2", {element: two, method: displayNumber}],
+    ["3", {element: three, method: displayNumber}],
+    ["4", {element: four, method: displayNumber}],
+    ["5", {element: five, method: displayNumber}],
+    ["6", {element: six, method: displayNumber}],
+    ["7", {element: seven, method: displayNumber}],
+    ["8", {element: eight, method: displayNumber}],
+    ["9", {element: nine, method: displayNumber}],
+    ["+", {element: add, method: basicOp}],
+    ["-", {element: subtract, method: basicOp}],
+    ["/", {element: divide, method: basicOp}],
+    ["*", {element: multiply, method: basicOp}],
+    [".", {element: decimalPoint, method: decimalPointEvent}],
+    ["%", {element: percent, method: percentEvent}],
+    ["Backspace", {element: backspace, method: backspaceEvent}],
+    ["=", {element: equal, method: equalsEvent}],
+    ["Enter", {element: equal, method: equalsEvent}]
+]);
+
+keyboard.addEventListener('keydown', function(event){
+    const Event = methodMap.get(event.key);
+    if(Event !== undefined){
+        Event.method(null, Event.element);
+        if(Event.element === equal){
+            Event.element.classList.add("equalpress");
+            Event.element.classList.remove("equals");
+            setTimeout(() => {
+                Event.element.classList.add("equals");
+                Event.element.classList.remove("equalpress");
+            }, 100);
+        }
+        else if([add, subtract, divide, multiply].includes(Event.element)){
+            Event.element.classList.add("press");
+            setTimeout(() => {
+                Event.element.classList.remove("press");
+            }, 100);
+        }
+        else{
+            Event.element.classList.add("press");
+            Event.element.classList.remove("darker");
+            setTimeout(() => {
+                Event.element.classList.add("darker");
+                Event.element.classList.remove("press");
+            }, 100);
+        }
+    }
+})

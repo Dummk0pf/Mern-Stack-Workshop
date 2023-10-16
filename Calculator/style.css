@@ -92,7 +92,7 @@ sub{
         background-color: rgba(255, 255, 255, 0.093);
     }
     
-    .button:active{
+    .button:active,.press{
         background-color: rgba(255, 255, 255, 0.307);
     }
     
@@ -106,4 +106,8 @@ sub{
 
     .equals:hover{
         background-color: rgba(86, 133, 251, 0.166);
+    }
+
+    .equals:active,.equalpress{
+        background-color: rgba(86, 133, 251, 0.353);
     }
